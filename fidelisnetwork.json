@@ -116,14 +116,14 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.summary.total_alerts", 
+                    "data_path": "action_result.summary.total_alerts",
                     "example_values": [
                         512
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.aaData.*.ALERT_ID", 
+                    "data_path": "action_result.data.*.aaData.*.ALERT_ID",
                     "example_values": [
                         false
                     ],
@@ -135,7 +135,7 @@
                     ]
                 },
                 {
-                    "data_path": "action_result.data.*.aaData.*.SEVERITY", 
+                    "data_path": "action_result.data.*.aaData.*.SEVERITY",
                     "example_values": [
                         false
                     ],
@@ -144,7 +144,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.aaData.*.HOST_IP", 
+                    "data_path": "action_result.data.*.aaData.*.HOST_IP",
                     "example_values": [
                         false
                     ],
@@ -153,7 +153,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.aaData.*.ALERT_TYPE", 
+                    "data_path": "action_result.data.*.aaData.*.ALERT_TYPE",
                     "example_values": [
                         false
                     ],
@@ -162,7 +162,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.aaData.*.ALERT_TIME", 
+                    "data_path": "action_result.data.*.aaData.*.ALERT_TIME",
                     "example_values": [
                         false
                     ],
@@ -171,7 +171,7 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.aaData.*.SUMMARY", 
+                    "data_path": "action_result.data.*.aaData.*.SUMMARY",
                     "example_values": [
                         false
                     ],
@@ -180,38 +180,38 @@
                     "data_type": "string"
                 },
                 {
-                    "data_path": "action_result.data.*.cancelled", 
+                    "data_path": "action_result.data.*.cancelled",
                     "example_values": [
                         false
-                    ], 
+                    ],
                     "data_type": "boolean"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.totalUnknown", 
+                    "data_path": "action_result.data.*.totalUnknown",
                     "example_values": [
                         false
-                    ], 
+                    ],
                     "data_type": "boolean"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.duration", 
+                    "data_path": "action_result.data.*.duration",
                     "example_values": [
                         4
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.alertTotal", 
+                    "data_path": "action_result.data.*.alertTotal",
                     "example_values": [
                         512
-                    ], 
+                    ],
                     "data_type": "numeric"
-                }, 
+                },
                 {
-                    "data_path": "action_result.data.*.total", 
+                    "data_path": "action_result.data.*.total",
                     "example_values": [
                         512
-                    ], 
+                    ],
                     "data_type": "numeric"
                 },
                 {
@@ -937,7 +937,7 @@
                     ],
                     "data_type": "numeric"
                 },
-                
+
                 {
                     "data_path": "action_result.message",
                     "data_type": "string"

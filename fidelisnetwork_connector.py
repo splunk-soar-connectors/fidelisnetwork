@@ -15,16 +15,18 @@
 #
 #
 # Phantom imports
+import datetime
+import json
+
 import phantom.app as phantom
 import requests
-import simplejson as json
-from datetime import datetime
 from bs4 import BeautifulSoup
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
 # imports specific to this connector
 from fidelisnetwork_consts import *
+
 
 class RetVal(tuple):
     def __new__(cls, val1, val2=None):
@@ -114,7 +116,7 @@ class FidelisnetworkConnector(BaseConnector):
 
             return headers
 
-        headers['x-uid']  = self._state.get('x_uid', None)
+        headers['x-uid'] = self._state.get('x_uid', None)
         return headers
 
     def _process_empty_reponse(self, response, action_result):
@@ -226,7 +228,7 @@ class FidelisnetworkConnector(BaseConnector):
                             data=data,
                             headers=headers,
                             verify=config.get('verify_server_cert', False),
-                            )
+            )
             # makes rest call again with new x-uid token in case old one gave 401 error
             if r.status_code == 401 and self._retry_access_token:
                 if self._state.get('x_uid'):
@@ -265,7 +267,7 @@ class FidelisnetworkConnector(BaseConnector):
             return (phantom.APP_SUCCESS, datetime.strptime(time, "%Y-%m-%d %H:%M:%S"))
         except Exception as e:
             self.debug_print("Wrong formate for '{}' please use this '%Y-%m-%d %H:%M:%S' formate. Exception : {}".format(time, e))
-            return action_result.set_status(phantom.APP_ERROR,"Wrong formate for time please use this '%Y-%m-%d %H:%M:%S' formate.")
+            return action_result.set_status(phantom.APP_ERROR, "Wrong formate for time please use this '%Y-%m-%d %H:%M:%S' formate.")
 
     def _list_alerts(self, param):
         """ List alerts
@@ -274,7 +276,7 @@ class FidelisnetworkConnector(BaseConnector):
             param : Dictionary of input parameters
 
         Returns:
-            status(phantom.APP_SUCCESS/phantom.APP_ERROR) 
+            status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -283,7 +285,7 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        order = [{"column": param.get('column',"ALERT_TIME"), "direction": param.get('direction',"DESC")}]
+        order = [{"column": param.get('column', "ALERT_TIME"), "direction": param.get('direction', "DESC")}]
 
         time_settings = {
             "from": "",
@@ -297,13 +299,13 @@ class FidelisnetworkConnector(BaseConnector):
         if start_time is None and end_time is None:
             self.debug_print('Time is not given by user.')
         if start_time is not None:
-            ret_val, resp_date =  self.time_format(action_result, start_time)
+            ret_val, resp_date = self.time_format(action_result, start_time)
             if not ret_val and not resp_date:
                 return action_result.get_status()
             time_settings["key"] = "custom"
             time_settings["from"] = resp_date
         if end_time is not None:
-            ret_val, resp_date =  self.time_format(action_result, end_time)
+            ret_val, resp_date = self.time_format(action_result, end_time)
             if not ret_val and not resp_date:
                 return action_result.get_status()
             time_settings["to"] = resp_date
@@ -350,7 +352,7 @@ class FidelisnetworkConnector(BaseConnector):
             param : Dictionary of input parameters
 
         Returns:
-            status(phantom.APP_SUCCESS/phantom.APP_ERROR) 
+            status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
@@ -376,13 +378,13 @@ class FidelisnetworkConnector(BaseConnector):
         return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_GET_ALERT_DETAILS)
 
     def _delete_alert(self, param):
-        """ Delete alert 
+        """ Delete alert
 
         Args:
             param : Dictionary of input parameters
 
         Returns:
-            status(phantom.APP_SUCCESS/phantom.APP_ERROR) 
+            status(phantom.APP_SUCCESS/phantom.APP_ERROR)
         """
 
         self.save_progress("In action handler for: {0}".format(self.get_action_identifier()))
