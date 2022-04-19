@@ -58,13 +58,14 @@
         },
         {
             "action": "list alerts",
-            "description": "List alerts",
+            "description": "List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time",
+            "verbose": "If the user provides time-related action parameters, the priority will be given to the [Time Range] action parameter and the search will be performed according to its given value.",
             "type": "investigate",
             "identifier": "list_alerts",
             "read_only": true,
             "parameters": {
                 "limit": {
-                    "description": "Limit of alerts",
+                    "description": "Specify the maximum number of alerts to return. You can specify between 1 and 200,000. (Default is 100)",
                     "data_type": "numeric",
                     "default": 100,
                     "order": 0
@@ -274,6 +275,7 @@
                     "description": "Alert ID",
                     "data_type": "string",
                     "primary": true,
+                    "required": true,
                     "order": 0,
                     "contains": [
                         "alert id"
@@ -962,13 +964,15 @@
         {
             "action": "delete alert",
             "description": "Delete alerts from Fidelis Network",
-            "type": "investigate",
+            "type": "generic",
+            "verbose": "This action will always succeed regardless of the input. This action will fail if at <b>alert_id</b> are not specified.",
             "identifier": "delete_alert",
-            "read_only": true,
+            "read_only": false,
             "parameters": {
                 "alert_id": {
                     "description": "Alert IDs (comma-separated)",
                     "data_type": "string",
+                    "required": true,
                     "primary": true,
                     "contains": [
                         "alert id"

@@ -15,8 +15,8 @@
 #
 #
 # Phantom imports
-import datetime
 import json
+from datetime import datetime
 
 import phantom.app as phantom
 import requests
@@ -50,6 +50,8 @@ class FidelisnetworkConnector(BaseConnector):
         self._base_url = None
         self._state = None
         self._retry_access_token = None
+        self._retry_one_more = None
+        self._retry_with_latest_header = None
 
     def initialize(self):
         """ This is an optional function that can be implemented by the AppConnector derived class. Since the
@@ -63,7 +65,10 @@ class FidelisnetworkConnector(BaseConnector):
         """
         config = self.get_config()
         self._state = self.load_state()
+        # Below variable uses for retrying rest call purpose
         self._retry_access_token = True
+        self._retry_one_more = True
+        self._retry_with_latest_header = True
         # Base URL
         base_url = config['host_url']
 
@@ -100,26 +105,23 @@ class FidelisnetworkConnector(BaseConnector):
             username = config['username'].strip()
             password = config['password'].strip()
             data = json.dumps({
-                    "user": username,
-                    "password": password
+                "user": username,
+                "password": password
             })
             endpoint = 'j/rest/v2/access/token/'
 
             ret_val, response = self._make_rest_call(endpoint, action_result, data=data, method="post", headers=headers)
 
-            if not ret_val and not response:
+            if phantom.is_fail(ret_val):
                 return headers
 
             self._state['x_uid'] = response.get('uid', None)
 
-            headers['x-uid'] = self._state.get('x_uid')
-
-            return headers
-
         headers['x-uid'] = self._state.get('x_uid', None)
+
         return headers
 
-    def _process_empty_reponse(self, response, action_result):
+    def _process_empty_response(self, response, action_result):
 
         self.save_progress("{}".format(response.status_code))
         if response.status_code == 200:
@@ -193,7 +195,7 @@ class FidelisnetworkConnector(BaseConnector):
         if 'json' in r.headers.get('Content-Type', ''):
             return self._process_json_response(r, action_result)
 
-        # Process an HTML resonse, Do this no matter what the api talks.
+        # Process an HTML response, Do this no matter what the api talks.
         # There is a high chance of a PROXY in between phantom and the rest of
         # world, in case of errors, PROXY's return HTML, this function parses
         # the error and adds it to the action_result.
@@ -202,7 +204,7 @@ class FidelisnetworkConnector(BaseConnector):
 
         # it's not content-type that is to be parsed, handle an empty response
         if not r.text:
-            return self._process_empty_reponse(r, action_result)
+            return self._process_empty_response(r, action_result)
 
         # everything else is actually an error at this point
         message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
@@ -231,11 +233,21 @@ class FidelisnetworkConnector(BaseConnector):
             )
             # makes rest call again with new x-uid token in case old one gave 401 error
             if r.status_code == 401 and self._retry_access_token:
+                # Retry the same rest call one more time to checking for avoiding token random behavior
+                if self._retry_one_more:
+                    self._retry_one_more = False  # make it to false to avoid rest call after one time (prevents recursive loop)
+                    return self._make_rest_call(endpoint, action_result, headers, params, data, method, **kwargs)
+
                 if self._state.get('x_uid'):
-                    self._state['x_uid'] = None
+                    self._state.pop('x_uid')
                 headers = self._login(action_result)
+
+                # Retry the same rest call one more time with latest headers for avoiding token random behavior
+                if self._retry_with_latest_header:
+                    self._retry_with_latest_header = False  # make it to false to avoid rest call after one time (prevents recursive loop)
+                    return self._make_rest_call(endpoint, action_result, headers, params, data, method, **kwargs)
                 self._retry_access_token = False  # make it to false to avoid getting access token after one time (prevents recursive loop)
-                return self._make_rest_call(endpoint, action_result, headers, params, data, method, **kwargs)
+
 
         except Exception as ex:
             self.debug_print('Exception in _make_rest_call: {}'.format(ex))
@@ -262,12 +274,45 @@ class FidelisnetworkConnector(BaseConnector):
         self.save_progress(FIDELIS_SUCC_CONNECTIVITY_TEST)
         return action_result.set_status(phantom.APP_SUCCESS)
 
-    def time_format(self, action_result, time=None):
+    def _validate_integers(self, action_result, parameter, key, allow_zero=False):
+        """Validate the provided input parameter value is a non-zero positive integer and returns the integer value of the parameter itself.
+
+        Parameters:
+            :param action_result: object of ActionResult class
+            :param parameter: input parameter
+            :param key: string value of parameter name
+            :param allow_zero: indicator for given parameter that whether zero value is allowed or not
+        Returns:
+            :return: integer value of the parameter
+        """
         try:
-            return (phantom.APP_SUCCESS, datetime.strptime(time, "%Y-%m-%d %H:%M:%S"))
+            parameter = int(parameter)
+
+            if parameter <= 0:
+                if allow_zero:
+                    if parameter < 0:
+                        action_result.set_status(phantom.APP_ERROR, FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG.format(parameter=key))
+                        return None
+                else:
+                    action_result.set_status(phantom.APP_ERROR, FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key))
+                    return None
         except Exception as e:
-            self.debug_print("Wrong formate for '{}' please use this '%Y-%m-%d %H:%M:%S' formate. Exception : {}".format(time, e))
-            return action_result.set_status(phantom.APP_ERROR, "Wrong formate for time please use this '%Y-%m-%d %H:%M:%S' formate.")
+            self.debug_print(f"Integer validation failed. Error occurred while validating integer value. Error: {str(e)}")
+            error_text = FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG.format(parameter=key) if allow_zero else FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key)
+            action_result.set_status(phantom.APP_ERROR, error_text)
+            return None
+
+        return parameter
+
+    def _check_time_format(self, action_result, time=None):
+        try:
+            datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
+            return True
+        except Exception as e:
+            action_result.set_status(phantom.APP_ERROR,
+                "Wrong format for '{}' please use this '%Y-%m-%d %H:%M:%S' format. Exception : {}".format(time, e)
+            )
+            return False
 
     def _list_alerts(self, param):
         """ List alerts
@@ -283,9 +328,16 @@ class FidelisnetworkConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        headers = self._login(action_result)
-
         order = [{"column": param.get('column', "ALERT_TIME"), "direction": param.get('direction', "DESC")}]
+
+        limit = self._validate_integers(action_result, int(param.get('limit', 100)), 'limit')
+        if limit is None:
+            return action_result.get_status(), None
+
+        pagination = {
+            "size": limit,
+            "page": 1
+        }
 
         time_settings = {
             "from": "",
@@ -294,27 +346,21 @@ class FidelisnetworkConnector(BaseConnector):
         }
 
         start_time = param.get('start_time', None)
-        end_time = param.get('start_time', None)
+        end_time = param.get('end_time', None)
 
         if start_time is None and end_time is None:
             self.debug_print('Time is not given by user.')
         if start_time is not None:
-            ret_val, resp_date = self.time_format(action_result, start_time)
-            if not ret_val and not resp_date:
+            if not self._check_time_format(action_result, start_time):
                 return action_result.get_status()
             time_settings["key"] = "custom"
-            time_settings["from"] = resp_date
+            time_settings["from"] = start_time
         if end_time is not None:
-            ret_val, resp_date = self.time_format(action_result, end_time)
-            if not ret_val and not resp_date:
+            if not self._check_time_format(action_result, end_time):
                 return action_result.get_status()
-            time_settings["to"] = resp_date
             time_settings["key"] = "custom"
+            time_settings["to"] = end_time
 
-        pagination = {
-            "size": param.get('limit', 100),
-            "page": 1
-        }
         data = json.dumps({
             "columns": [
                 "ALERT_ID",
@@ -329,14 +375,14 @@ class FidelisnetworkConnector(BaseConnector):
             "timeSettings": time_settings
         })
 
+        headers = self._login(action_result)
+
         endpoint = 'j/rest/v1/alert/search/'
 
         ret_val, resp_json = self._make_rest_call(endpoint, action_result, data=data, method="post", headers=headers)
         if not ret_val and not resp_json:
             return action_result.get_status()
 
-        # for item in resp_json.get('aaData'):
-        #     action_result.add_data(item)
         action_result.add_data(resp_json)
 
         # Add a dictionary that is made up of the most important values from data into the summary
@@ -397,12 +443,6 @@ class FidelisnetworkConnector(BaseConnector):
 
         alert_ids = [x.strip() for x in alert_ids.split(",")]
         alert_ids = list(filter(None, alert_ids))
-
-        for alert_id in alert_ids:
-            endpoint = 'j/rest/v1/alert/info/{}/'.format(alert_id)
-            ret_val, resp_json = self._make_rest_call(endpoint, action_result, headers=headers)
-            if not ret_val and not resp_json:
-                return action_result.get_status()
 
         data = json.dumps({
             "type": "byAlertID",

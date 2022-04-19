@@ -23,3 +23,5 @@ FIDELIS_SUCC_LIST_ALERTS = "Successfully retrieved alerts"
 FIDELIS_SUCC_DELETE_ALERTS = "Successfully deleted alerts"
 FIDELIS_ERR_DEVICE_CONNECTIVITY = 'Could not connect to Fidelis Network:\n{0}'
 FIDELIS_ERR_DEVICE_CONNECTIVITY_NOFORMAT = 'Could not connect to Fidelis Network'
+FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG = "Please provide zero or positive integer value in the {parameter} parameter."
+FIDELIS_LIMIT_VALIDATION_MSG = "Please provide a valid non-zero positive integer value in the {parameter} parameter."
