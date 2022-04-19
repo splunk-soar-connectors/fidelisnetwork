@@ -1,4 +1,4 @@
-# File: checkpoint_consts.py
+# File: fidelisnetwork_consts.py
 #
 # Copyright (c) 2022 Splunk Inc.
 #
