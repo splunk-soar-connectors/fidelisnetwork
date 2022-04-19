@@ -248,7 +248,6 @@ class FidelisnetworkConnector(BaseConnector):
                     return self._make_rest_call(endpoint, action_result, headers, params, data, method, **kwargs)
                 self._retry_access_token = False  # make it to false to avoid getting access token after one time (prevents recursive loop)
 
-
         except Exception as ex:
             self.debug_print('Exception in _make_rest_call: {}'.format(ex))
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(ex))), resp_json)
@@ -297,19 +296,25 @@ class FidelisnetworkConnector(BaseConnector):
                     action_result.set_status(phantom.APP_ERROR, FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key))
                     return None
         except Exception as e:
-            self.debug_print(f"Integer validation failed. Error occurred while validating integer value. Error: {str(e)}")
-            error_text = FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG.format(parameter=key) if allow_zero else FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key)
+            self.debug_print(
+                "Integer validation failed. Error occurred while validating integer value. Error: {}".format(str(e))
+            )
+            if allow_zero:
+                error_text = FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG.format(parameter=key)
+            else:
+                error_text = FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key)
             action_result.set_status(phantom.APP_ERROR, error_text)
             return None
 
         return parameter
 
-    def _check_time_format(self, action_result, time=None):
+    def _validate_time_format(self, action_result, time=None):
         try:
             datetime.strptime(time, "%Y-%m-%d %H:%M:%S")
             return True
         except Exception as e:
-            action_result.set_status(phantom.APP_ERROR,
+            action_result.set_status(
+                phantom.APP_ERROR,
                 "Wrong format for '{}' please use this '%Y-%m-%d %H:%M:%S' format. Exception : {}".format(time, e)
             )
             return False
@@ -351,12 +356,12 @@ class FidelisnetworkConnector(BaseConnector):
         if start_time is None and end_time is None:
             self.debug_print('Time is not given by user.')
         if start_time is not None:
-            if not self._check_time_format(action_result, start_time):
+            if not self._validate_time_format(action_result, start_time):
                 return action_result.get_status()
             time_settings["key"] = "custom"
             time_settings["from"] = start_time
         if end_time is not None:
-            if not self._check_time_format(action_result, end_time):
+            if not self._validate_time_format(action_result, end_time):
                 return action_result.get_status()
             time_settings["key"] = "custom"
             time_settings["to"] = end_time
