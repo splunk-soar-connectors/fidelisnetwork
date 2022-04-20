@@ -25,3 +25,4 @@ FIDELIS_ERR_DEVICE_CONNECTIVITY = 'Could not connect to Fidelis Network:\n{0}'
 FIDELIS_ERR_DEVICE_CONNECTIVITY_NOFORMAT = 'Could not connect to Fidelis Network'
 FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG = "Please provide zero or positive integer value in the {parameter} parameter."
 FIDELIS_LIMIT_VALIDATION_MSG = "Please provide a valid non-zero positive integer value in the {parameter} parameter."
+FIDELIS_ERROR_STRINGS = ['AlertDetailServiceData not retrieved for alertId: -1', 'For input string']

@@ -175,6 +175,8 @@ class FidelisnetworkConnector(BaseConnector):
             message = resp_json['detailMessage']
             if 'Unauthorized access from Java with invalid session' in resp_json['detailMessage']:
                 message = FIDELIS_TEST_CONN_MSG
+            elif any(error_msg in resp_json['detailMessage'] for error_msg in FIDELIS_ERROR_STRINGS):
+                message = "Please enter valid Alert ID [Numeric]"
         # You should process the error returned in the json
         else:
             message = "Error from server. Status Code: {0} Data from server: {1}".format(
@@ -245,6 +247,7 @@ class FidelisnetworkConnector(BaseConnector):
                         self._state.pop('x_uid')
                     headers = self._login(action_result)
                     self._retry_header = False
+                    self._retry_one_more = True
 
                 # Retry the same rest call one more time with latest headers for avoiding token random behavior
                 if self._retry_with_latest_header:
