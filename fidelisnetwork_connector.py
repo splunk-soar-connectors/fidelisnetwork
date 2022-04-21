@@ -219,7 +219,6 @@ class FidelisnetworkConnector(BaseConnector):
     def _make_rest_call(self, endpoint, action_result, headers=None, params=None, data=None, method="get", **kwargs):
         # **kwargs can be any additional parameters that requests.request accepts
         resp_json = None
-        config = self.get_config()
         try:
             request_func = getattr(requests, method)
         except AttributeError:
@@ -233,7 +232,7 @@ class FidelisnetworkConnector(BaseConnector):
                             url,
                             data=data,
                             headers=headers,
-                            verify=config.get('verify_server_cert', False),
+                            verify=True,
             )
             # makes rest call again with new x-uid token in case old one gave 401 error
             if r.status_code == 401 and self._retry_access_token:
