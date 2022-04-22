@@ -471,7 +471,11 @@ class FidelisnetworkConnector(BaseConnector):
         if not ret_val and not resp_json:
             return action_result.get_status()
 
-        action_result.add_data(resp_json)
+        alert_lis = []
+        for i in range(0,len(alert_ids)):
+            alert_lis.append({'ALERT_ID': alert_ids[i]})
+        
+        action_result.add_data({'ALERT_DATA': alert_lis})
 
         summary = action_result.update_summary({})
         summary['alert_ids'] = "Deleted {} alerts from Fidelis Network".format(len(alert_ids))

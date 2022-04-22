@@ -1001,16 +1001,16 @@
                 },
                 {
                     "data_path": "action_result.parameter.alert_id",
+                    "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.ALERT_DATA.*.ALERT_ID",
                     "data_type": "string",
                     "column_name":"Alert ID",
                     "column_order": 0,
                     "contains": [
                         "alert id"
                     ]
-                },
-                {
-                    "data_path": "action_result.data",
-                    "data_type": "string"
                 },
                 {
                     "data_path": "action_result.summary",
