@@ -341,7 +341,7 @@ class FidelisnetworkConnector(BaseConnector):
 
         order = [{"column": param.get('column', "ALERT_TIME"), "direction": param.get('direction', "DESC")}]
 
-        limit = self._validate_integers(action_result, int(param.get('limit', 100)), 'limit')
+        limit = self._validate_integers(action_result, param.get('limit', 100), 'limit')
         if limit is None:
             return action_result.get_status(), None
 
