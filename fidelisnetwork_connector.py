@@ -398,9 +398,10 @@ class FidelisnetworkConnector(BaseConnector):
 
         # Add a dictionary that is made up of the most important values from data into the summary
         summary = action_result.update_summary({})
-        summary['total_alerts'] = len(resp_json.get('aaData'))
+        total_alert = len(resp_json.get('aaData'))
+        summary['total_alerts'] = total_alert
 
-        return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_LIST_ALERTS)
+        return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_LIST_ALERTS.format(total_alert))
 
     def _get_alert_details(self, param):
         """ Get alert detail
@@ -454,6 +455,9 @@ class FidelisnetworkConnector(BaseConnector):
 
         alert_ids = [x.strip() for x in alert_ids.split(",")]
         alert_ids = list(filter(None, alert_ids))
+
+        if not(len(alert_ids)):
+            return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter='alert_id'))
 
         data = json.dumps({
             "type": "byAlertID",
