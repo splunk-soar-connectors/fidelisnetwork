@@ -472,9 +472,9 @@ class FidelisnetworkConnector(BaseConnector):
             return action_result.get_status()
 
         alert_lis = []
-        for i in range(0,len(alert_ids)):
+        for i in range(0, len(alert_ids)):
             alert_lis.append({'ALERT_ID': alert_ids[i]})
-        
+
         action_result.add_data({'ALERT_DATA': alert_lis})
 
         summary = action_result.update_summary({})
