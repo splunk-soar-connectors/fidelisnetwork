@@ -16,8 +16,6 @@
 #
 # Phantom imports
 import json
-import os
-import encryption_helper
 from datetime import datetime
 
 import phantom.app as phantom
