@@ -16,11 +16,14 @@
 #
 # Phantom imports
 import json
+import os
+import encryption_helper
 from datetime import datetime
 
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
+from request_handler import RequestStateHandler  # noqa
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
@@ -48,7 +51,7 @@ class FidelisnetworkConnector(BaseConnector):
         super(FidelisnetworkConnector, self).__init__()
 
         self._base_url = None
-        self._state = None
+        self._state = {}
         self._retry_access_token = None
         self._retry_one_more = None
         self._retry_with_latest_header = None
@@ -65,7 +68,9 @@ class FidelisnetworkConnector(BaseConnector):
             :return: status success/failure
         """
         config = self.get_config()
-        self._state = self.load_state()
+        asset_id = self.get_asset_id()
+        self.rsh = RequestStateHandler(asset_id)
+        self._state = self.rsh.load_state()
         # Below variable uses for retrying rest call purpose
         self._retry_access_token = True
         self._retry_one_more = True
@@ -84,7 +89,7 @@ class FidelisnetworkConnector(BaseConnector):
         Returns:
             :return: status success
         """
-        self.save_state(self._state)
+        self.rsh.save_state(self._state)
         return phantom.APP_SUCCESS
 
     def _login(self, action_result):
