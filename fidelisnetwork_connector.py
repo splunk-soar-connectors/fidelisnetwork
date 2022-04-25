@@ -21,12 +21,12 @@ from datetime import datetime
 import phantom.app as phantom
 import requests
 from bs4 import BeautifulSoup
-from request_handler import RequestStateHandler  # noqa
 from phantom.action_result import ActionResult
 from phantom.base_connector import BaseConnector
 
 # imports specific to this connector
 from fidelisnetwork_consts import *
+from request_handler import RequestStateHandler  # noqa
 
 
 class RetVal(tuple):
