@@ -1,10 +1,10 @@
 {
     "appid": "9b89fded-2213-4668-98f4-a130ad6e7cf9",
     "name": "Fidelis Network",
-    "description": "This app supports a variety of endpoint and network based containment actions on Check Point Firewall",
+    "description": "This app integrates with Fidelis Network to execute various investigate and generic actions",
     "publisher": "Splunk",
     "package_name": "phantom_fidelisnetwork",
-    "type": "firewall",
+    "type": "endpoint",
     "license": "Copyright (c) 2022 Splunk Inc.",
     "main_module": "fidelisnetwork_connector.py",
     "app_version": "1.0.0",
@@ -13,7 +13,9 @@
     "product_name": "Fidelis Network",
     "product_version_regex": ".*",
     "min_phantom_version": "5.2.0",
-    "latest_tested_versions": [],
+    "latest_tested_versions": [
+        "Fidelis Network and Deception, v9.4.x"
+    ],
     "logo": "logo_fidelisnetwork.svg",
     "logo_dark": "logo_fidelisnetwork_dark.svg",
     "python_version": "3",
