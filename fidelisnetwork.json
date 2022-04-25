@@ -4,7 +4,7 @@
     "description": "This app integrates with Fidelis Network to execute various investigate and generic actions",
     "publisher": "Splunk",
     "package_name": "phantom_fidelisnetwork",
-    "type": "endpoint",
+    "type": "network security",
     "license": "Copyright (c) 2022 Splunk Inc.",
     "main_module": "fidelisnetwork_connector.py",
     "app_version": "1.0.0",
