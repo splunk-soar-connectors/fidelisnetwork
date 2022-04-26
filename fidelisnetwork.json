@@ -19,7 +19,7 @@
     "logo": "logo_fidelisnetwork.svg",
     "logo_dark": "logo_fidelisnetwork_dark.svg",
     "python_version": "3",
-    "fips_compliant": false,
+    "fips_compliant": true,
     "configuration": {
         "host_url": {
             "description": "Host URL (e.g. https://123E5678.fclab.fideliscloud.com/)",
