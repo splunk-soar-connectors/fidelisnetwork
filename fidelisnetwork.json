@@ -128,11 +128,11 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.ALERT_ID",
                     "example_values": [
-                        false
+                        4046
                     ],
                     "column_name": "Alert ID",
                     "column_order": 0,
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "contains": [
                         "alert id"
                     ]
@@ -140,7 +140,7 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.SEVERITY",
                     "example_values": [
-                        false
+                        "Medium"
                     ],
                     "column_name": "SEVERITY",
                     "column_order": 1,
@@ -149,7 +149,7 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.HOST_IP",
                     "example_values": [
-                        false
+                        "10.10.10.10"
                     ],
                     "column_name": "HOST IP",
                     "column_order": 2,
@@ -158,7 +158,7 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.ALERT_TYPE",
                     "example_values": [
-                        false
+                        "Endpoint"
                     ],
                     "column_name": "ALERT TYPE",
                     "column_order": 3,
@@ -167,7 +167,7 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.ALERT_TIME",
                     "example_values": [
-                        false
+                        "2022-04-27 06:12:45"
                     ],
                     "column_name": "ALERT TIME",
                     "column_order": 4,
@@ -176,7 +176,7 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.SUMMARY",
                     "example_values": [
-                        false
+                        "Endpoint alert on root-win10: Artifact: GoogleUpdate.exe"
                     ],
                     "column_name": "SUMMARY",
                     "column_order": 5,
@@ -343,6 +343,9 @@
                     "data_type": "string",
                     "contains": [
                         "alert id"
+                    ],
+                    "example_values": [
+                        "4046"
                     ]
                 },
                 {
@@ -1005,15 +1008,21 @@
                     "data_type": "string",
                     "contains": [
                         "alert id"
+                    ],
+                    "example_values":[
+                        "4046"
                     ]
                 },
                 {
                     "data_path": "action_result.data.*.ALERT_DATA.*.ALERT_ID",
-                    "data_type": "string",
+                    "data_type": "numeric",
                     "column_name": "Alert ID",
                     "column_order": 0,
                     "contains": [
                         "alert id"
+                    ],
+                    "example_values":[
+                        4046
                     ]
                 },
                 {
