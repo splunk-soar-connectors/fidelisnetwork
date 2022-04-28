@@ -1009,7 +1009,7 @@
                     "contains": [
                         "alert id"
                     ],
-                    "example_values": [
+                    "example_values":[
                         "4046"
                     ]
                 },
@@ -1021,7 +1021,7 @@
                     "contains": [
                         "alert id"
                     ],
-                    "example_values": [
+                    "example_values":[
                         4046
                     ]
                 },
