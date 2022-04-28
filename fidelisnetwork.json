@@ -7,7 +7,7 @@
     "type": "network security",
     "license": "Copyright (c) 2022 Splunk Inc.",
     "main_module": "fidelisnetwork_connector.py",
-    "app_version": "1.0.0",
+    "app_version": "1.0.1",
     "utctime_updated": "2022-01-13T00:10:58.000000Z",
     "product_vendor": "Fidelis Cybersecurity",
     "product_name": "Fidelis Network",
@@ -1037,7 +1037,7 @@
                     "contains": [
                         "alert id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         "4046"
                     ]
                 },
@@ -1049,7 +1049,7 @@
                     "contains": [
                         "alert id"
                     ],
-                    "example_values":[
+                    "example_values": [
                         4046
                     ]
                 },
