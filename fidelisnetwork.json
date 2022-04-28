@@ -176,11 +176,39 @@
                 {
                     "data_path": "action_result.data.*.aaData.*.SUMMARY",
                     "example_values": [
-                        "Endpoint alert on root-win10: Artifact: GoogleUpdate.exe"
+                        "Endpoint alert on root-win10"
                     ],
                     "column_name": "Summary",
                     "column_order": 5,
                     "data_type": "string"
+                },
+                {
+                    "data_path": "action_result.data.*.toTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-04-21 12:00:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.fromTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-03-28 12:00:00"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.retrieveTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-04-22 03:37:45"
+                    ]
+                },
+                {
+                    "data_path": "action_result.data.*.referenceTime",
+                    "data_type": "string",
+                    "example_values": [
+                        "2022-04-21 12:00:00"
+                    ]
                 },
                 {
                     "data_path": "action_result.data.*.cancelled",
@@ -323,7 +351,7 @@
                 {
                     "data_path": "action_result.data.*.time",
                     "example_values": [
-                        "Medium"
+                        "2022-04-27 06:12:45"
                     ],
                     "column_name": "Alert Time",
                     "column_order": 2,
@@ -332,7 +360,7 @@
                 {
                     "data_path": "action_result.data.*.summary",
                     "example_values": [
-                        "Medium"
+                        "Endpoint alert on root-win10"
                     ],
                     "column_name": "Summary",
                     "column_order": 3,
@@ -1042,6 +1070,20 @@
                         1
                     ],
                     "data_type": "numeric"
+                },
+                {
+                    "data_path": "action_result.data.*.Console",
+                    "data_type": "string",
+                    "example_values": [
+                        "OK"
+                    ]
+                },
+                {
+                    "data_path": "action_result.summary.alert_ids",
+                    "data_type": "string",
+                    "example_values": [
+                        "Deleted 2 alerts from Fidelis Network"
+                    ]
                 }
             ],
             "versions": "EQ(*)"
