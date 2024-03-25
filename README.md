@@ -2,37 +2,26 @@
 # Fidelis Network
 
 Publisher: Splunk  
-Connector Version: 1\.0\.1  
+Connector Version: 1.0.2  
 Product Vendor: Fidelis Cybersecurity  
 Product Name: Fidelis Network  
-Product Version Supported (regex): "\.\*"  
-Minimum Product Version: 5\.2\.0  
+Product Version Supported (regex): ".\*"  
+Minimum Product Version: 5.2.0  
 
 This app integrates with Fidelis Network to execute various investigate and generic actions
-
-# Splunk> Phantom
-
-Welcome to the open-source repository for Splunk> Phantom's fidelisnetwork App.
-
-Please have a look at our [Contributing Guide](https://github.com/Splunk-SOAR-Apps/.github/blob/main/.github/CONTRIBUTING.md) if you are interested in contributing, raising issues, or learning more about open-source Phantom apps.
-
-## Legal and License
-
-This Phantom App is licensed under the Apache 2.0 license. Please see our [Contributing Guide](https://github.com/Splunk-SOAR-Apps/.github/blob/main/.github/CONTRIBUTING.md#legal-notice) for further details.
-
 
 ### Configuration Variables
 The below configuration variables are required for this Connector to operate.  These variables are specified when configuring a Fidelis Network asset in SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**host\_url** |  required  | string | Host URL \(e\.g\. https\://123E5678\.fclab\.fideliscloud\.com/\)
+**host_url** |  required  | string | Host URL (e.g. https://123E5678.fclab.fideliscloud.com/)
 **username** |  required  | string | Username
 **password** |  required  | password | Password
 
 ### Supported Actions  
 [test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity  
-[list alerts](#action-list-alerts) - List all of the alerts tracked within the enterprise on particular assets and\|or users for the specified time  
+[list alerts](#action-list-alerts) - List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time  
 [get alert details](#action-get-alert-details) - Gets an alert details from Fidelis Network  
 [delete alert](#action-delete-alert) - Delete alerts from Fidelis Network  
 
@@ -42,7 +31,7 @@ Validate the asset configuration for connectivity
 Type: **test**  
 Read only: **True**
 
-This action logs into the device using a REST API call to check the connection and credentials configured\.
+This action logs into the device using a REST API call to check the connection and credentials configured.
 
 #### Action Parameters
 No parameters are required for this action
@@ -51,52 +40,52 @@ No parameters are required for this action
 No Output  
 
 ## action: 'list alerts'
-List all of the alerts tracked within the enterprise on particular assets and\|or users for the specified time
+List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time
 
 Type: **investigate**  
 Read only: **True**
 
-If the user provides time\-related action parameters, the priority will be given to the \[Time Range\] action parameter and the search will be performed according to its given value\.
+If the user provides time-related action parameters, the priority will be given to the [Time Range] action parameter and the search will be performed according to its given value.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **column** |  required  | Column for ordering | string | 
 **direction** |  required  | Direction of alerts order | string | 
-**start\_time** |  optional  | Start time in UTC \(YYYY\-MM\-DD HH\:MM\:SS\) | string | 
-**end\_time** |  optional  | End time in UTC \(YYYY\-MM\-DD HH\:MM\:SS\) | string | 
-**limit** |  optional  | Specify the maximum number of alerts to return\. You can specify between 1 and 200,000\. \(Default is 100\) | numeric | 
+**start_time** |  optional  | Start time in UTC (YYYY-MM-DD HH:MM:SS) | string | 
+**end_time** |  optional  | End time in UTC (YYYY-MM-DD HH:MM:SS) | string | 
+**limit** |  optional  | Specify the maximum number of alerts to return. You can specify between 1 and 200,000. (Default is 100) | numeric | 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.summary\.total\_alerts | numeric | 
-action\_result\.data\.\*\.aaData\.\*\.ALERT\_ID | numeric |  `alert id` 
-action\_result\.data\.\*\.aaData\.\*\.SEVERITY | string | 
-action\_result\.data\.\*\.aaData\.\*\.HOST\_IP | string | 
-action\_result\.data\.\*\.aaData\.\*\.ALERT\_TYPE | string | 
-action\_result\.data\.\*\.aaData\.\*\.ALERT\_TIME | string | 
-action\_result\.data\.\*\.aaData\.\*\.SUMMARY | string | 
-action\_result\.data\.\*\.toTime | string | 
-action\_result\.data\.\*\.fromTime | string | 
-action\_result\.data\.\*\.retrieveTime | string | 
-action\_result\.data\.\*\.referenceTime | string | 
-action\_result\.data\.\*\.cancelled | boolean | 
-action\_result\.data\.\*\.totalUnknown | boolean | 
-action\_result\.data\.\*\.duration | numeric | 
-action\_result\.data\.\*\.alertTotal | numeric | 
-action\_result\.data\.\*\.total | numeric | 
-action\_result\.parameter\.column | string | 
-action\_result\.parameter\.direction | string | 
-action\_result\.parameter\.end\_time | string | 
-action\_result\.parameter\.limit | numeric | 
-action\_result\.parameter\.start\_time | string | 
-action\_result\.data | string | 
-action\_result\.summary | string | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.summary.total_alerts | numeric |  |   512 
+action_result.data.\*.aaData.\*.ALERT_ID | numeric |  `alert id`  |   4046 
+action_result.data.\*.aaData.\*.SEVERITY | string |  |   Medium 
+action_result.data.\*.aaData.\*.HOST_IP | string |  |   10.10.10.10 
+action_result.data.\*.aaData.\*.ALERT_TYPE | string |  |   Endpoint 
+action_result.data.\*.aaData.\*.ALERT_TIME | string |  |   2022-04-27 06:12:45 
+action_result.data.\*.aaData.\*.SUMMARY | string |  |   Endpoint alert on root-win10 
+action_result.data.\*.toTime | string |  |   2022-04-21 12:00:00 
+action_result.data.\*.fromTime | string |  |   2022-03-28 12:00:00 
+action_result.data.\*.retrieveTime | string |  |   2022-04-22 03:37:45 
+action_result.data.\*.referenceTime | string |  |   2022-04-21 12:00:00 
+action_result.data.\*.cancelled | boolean |  |   False 
+action_result.data.\*.totalUnknown | boolean |  |   False 
+action_result.data.\*.duration | numeric |  |   4 
+action_result.data.\*.alertTotal | numeric |  |   512 
+action_result.data.\*.total | numeric |  |   512 
+action_result.parameter.column | string |  |  
+action_result.parameter.direction | string |  |  
+action_result.parameter.end_time | string |  |  
+action_result.parameter.limit | numeric |  |  
+action_result.parameter.start_time | string |  |  
+action_result.data | string |  |  
+action_result.summary | string |  |  
+action_result.message | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'get alert details'
 Gets an alert details from Fidelis Network
@@ -107,124 +96,124 @@ Read only: **True**
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | Alert ID | string |  `alert id` 
+**alert_id** |  required  | Alert ID | string |  `alert id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.data\.\*\.alertId | numeric |  `alert id` 
-action\_result\.data\.\*\.severity | string | 
-action\_result\.data\.\*\.time | string | 
-action\_result\.data\.\*\.summary | string | 
-action\_result\.parameter\.alert\_id | string |  `alert id` 
-action\_result\.data\.\*\.aggAlertCounts\.\*\.aggAlertId | numeric | 
-action\_result\.summary | string | 
-action\_result\.data\.\*\.aggAlertCounts\.\*\.alertCount | numeric | 
-action\_result\.data\.\*\.anomalyAlertInfo | string | 
-action\_result\.data\.\*\.assets\.alertId | numeric | 
-action\_result\.data\.\*\.assets\.asset\.assetId | numeric | 
-action\_result\.data\.\*\.assets\.asset\.compGroupId | numeric | 
-action\_result\.data\.\*\.assets\.asset\.coverageScore | numeric | 
-action\_result\.data\.\*\.assets\.asset\.decryptEnd | string | 
-action\_result\.data\.\*\.assets\.asset\.decryptStart | string | 
-action\_result\.data\.\*\.assets\.asset\.decryptStartUser | string | 
-action\_result\.data\.\*\.assets\.asset\.decryptingDuringAlert | boolean | 
-action\_result\.data\.\*\.assets\.asset\.importanceScore | numeric | 
-action\_result\.data\.\*\.assets\.asset\.insertTime | numeric | 
-action\_result\.data\.\*\.assets\.asset\.lastCompId | numeric | 
-action\_result\.data\.\*\.assets\.asset\.lastUpdate | numeric | 
-action\_result\.data\.\*\.assets\.asset\.riskScore | numeric | 
-action\_result\.data\.\*\.assets\.asset\.severityScore | numeric | 
-action\_result\.data\.\*\.assets\.asset\.subnetId | numeric | 
-action\_result\.data\.\*\.assets\.assetId | numeric | 
-action\_result\.data\.\*\.assets\.dstAssetId | numeric | 
-action\_result\.data\.\*\.assets\.groupId | numeric | 
-action\_result\.data\.\*\.assets\.insertDate | numeric | 
-action\_result\.data\.\*\.assets\.lastUpdate | numeric | 
-action\_result\.data\.\*\.assets\.otherAsset | string | 
-action\_result\.data\.\*\.assets\.otherAssetId | numeric | 
-action\_result\.data\.\*\.assets\.senId | numeric | 
-action\_result\.data\.\*\.assets\.srcAssetId | numeric | 
-action\_result\.data\.\*\.assets\.timestamp | numeric | 
-action\_result\.data\.\*\.bit9FindFileUrl | string | 
-action\_result\.data\.\*\.clientPort | numeric | 
-action\_result\.data\.\*\.collector\.accessible | boolean | 
-action\_result\.data\.\*\.collector\.commandPostIp | string | 
-action\_result\.data\.\*\.collector\.commandPostName | string | 
-action\_result\.data\.\*\.collector\.id | string | 
-action\_result\.data\.\*\.collector\.ip | string | 
-action\_result\.data\.\*\.collector\.local | boolean | 
-action\_result\.data\.\*\.collector\.name | string | 
-action\_result\.data\.\*\.collector\.registered | boolean | 
-action\_result\.data\.\*\.componentId | numeric | 
-action\_result\.data\.\*\.compression | numeric | 
-action\_result\.data\.\*\.conclusionAssignee | string | 
-action\_result\.data\.\*\.conclusionStatus | string | 
-action\_result\.data\.\*\.decodingPath\.clickableDpaths | string | 
-action\_result\.data\.\*\.decodingPath\.commandpostIp | string | 
-action\_result\.data\.\*\.decodingPath\.decodingPaths | string | 
-action\_result\.data\.\*\.decodingPath\.originalAttributes | string | 
-action\_result\.data\.\*\.decodingPath\.originalDPath | string | 
-action\_result\.data\.\*\.distAlertId\.alertId | numeric | 
-action\_result\.data\.\*\.distAlertId\.commandPostId | numeric | 
-action\_result\.data\.\*\.distAlertId\.local | boolean | 
-action\_result\.data\.\*\.dstCity | string | 
-action\_result\.data\.\*\.dstIpInternal | boolean | 
-action\_result\.data\.\*\.dstPort | numeric | 
-action\_result\.data\.\*\.dstPortDesc | string | 
-action\_result\.data\.\*\.dstPortName | string | 
-action\_result\.data\.\*\.dstRegion | string | 
-action\_result\.data\.\*\.endpointAlert\.alertId | numeric | 
-action\_result\.data\.\*\.endpointAlert\.confidence | numeric | 
-action\_result\.data\.\*\.endpointAlert\.createDate | numeric | 
-action\_result\.data\.\*\.endpointAlert\.eventStatus | numeric | 
-action\_result\.data\.\*\.endpointAlert\.eventTime | numeric | 
-action\_result\.data\.\*\.endpointAlert\.eventType | numeric | 
-action\_result\.data\.\*\.endpointAlert\.insertTime | numeric | 
-action\_result\.data\.\*\.endpointAlert\.intelSourceType | numeric | 
-action\_result\.data\.\*\.endpointAlert\.lastUpdate | numeric | 
-action\_result\.data\.\*\.endpointAlert\.respondeDate | string | 
-action\_result\.data\.\*\.endpointAlert\.severity | numeric | 
-action\_result\.data\.\*\.endpointAlert\.sourceType | numeric | 
-action\_result\.data\.\*\.endpointAlert\.status | numeric | 
-action\_result\.data\.\*\.endpointAlert\.userFlagged | numeric | 
-action\_result\.data\.\*\.endpointAlert\.validatedDate | string | 
-action\_result\.data\.\*\.endpointAlert\.viewed | numeric | 
-action\_result\.data\.\*\.entropy | numeric | 
-action\_result\.data\.\*\.fidelisScore | numeric | 
-action\_result\.data\.\*\.groupId | numeric | 
-action\_result\.data\.\*\.hostCity | string | 
-action\_result\.data\.\*\.hostInfo\.agentVersion | string | 
-action\_result\.data\.\*\.hostInfo\.hostDesc | string | 
-action\_result\.data\.\*\.hostRegion | string | 
-action\_result\.data\.\*\.ip2IdExist | boolean | 
-action\_result\.data\.\*\.ipProtocol | string | 
-action\_result\.data\.\*\.pcapUUID | string | 
-action\_result\.data\.\*\.pfh | string | 
-action\_result\.data\.\*\.pfhFileLength | string | 
-action\_result\.data\.\*\.playbookInfo | string | 
-action\_result\.data\.\*\.quarantineInfo | string | 
-action\_result\.data\.\*\.relSesId | string | 
-action\_result\.data\.\*\.rule | string | 
-action\_result\.data\.\*\.ruleId | numeric | 
-action\_result\.data\.\*\.s1 | string | 
-action\_result\.data\.\*\.sensorIp | string | 
-action\_result\.data\.\*\.serverPort | numeric | 
-action\_result\.data\.\*\.srcCity | string | 
-action\_result\.data\.\*\.srcIpInternal | boolean | 
-action\_result\.data\.\*\.srcPort | numeric | 
-action\_result\.data\.\*\.srcPortDesc | string | 
-action\_result\.data\.\*\.srcPortName | string | 
-action\_result\.data\.\*\.srcRegion | string | 
-action\_result\.data\.\*\.ticket\.assignedGroupId | numeric | 
-action\_result\.data\.\*\.ticket\.assignedUserId | numeric | 
-action\_result\.data\.\*\.virusTotalDetections | string | 
-action\_result\.data\.\*\.vlanId | numeric | 
-action\_result\.data\.\*\.workflowAggAlertId | numeric | 
-action\_result\.message | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric |   
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.data.\*.alertId | numeric |  `alert id`  |   4086 
+action_result.data.\*.severity | string |  |   Medium 
+action_result.data.\*.time | string |  |   2022-04-27 06:12:45 
+action_result.data.\*.summary | string |  |   Endpoint alert on root-win10 
+action_result.parameter.alert_id | string |  `alert id`  |   4046 
+action_result.data.\*.aggAlertCounts.\*.aggAlertId | numeric |  |   14 
+action_result.summary | string |  |  
+action_result.data.\*.aggAlertCounts.\*.alertCount | numeric |  |   282 
+action_result.data.\*.anomalyAlertInfo | string |  |  
+action_result.data.\*.assets.alertId | numeric |  |   4086 
+action_result.data.\*.assets.asset.assetId | numeric |  |   8 
+action_result.data.\*.assets.asset.compGroupId | numeric |  |   0 
+action_result.data.\*.assets.asset.coverageScore | numeric |  |   2 
+action_result.data.\*.assets.asset.decryptEnd | string |  |  
+action_result.data.\*.assets.asset.decryptStart | string |  |  
+action_result.data.\*.assets.asset.decryptStartUser | string |  |  
+action_result.data.\*.assets.asset.decryptingDuringAlert | boolean |  |   False 
+action_result.data.\*.assets.asset.importanceScore | numeric |  |   5 
+action_result.data.\*.assets.asset.insertTime | numeric |  |   1648551060000 
+action_result.data.\*.assets.asset.lastCompId | numeric |  |   4294967294 
+action_result.data.\*.assets.asset.lastUpdate | numeric |  |   1648555310000 
+action_result.data.\*.assets.asset.riskScore | numeric |  |   5 
+action_result.data.\*.assets.asset.severityScore | numeric |  |   4 
+action_result.data.\*.assets.asset.subnetId | numeric |  |   5 
+action_result.data.\*.assets.assetId | numeric |  |   8 
+action_result.data.\*.assets.dstAssetId | numeric |  |   0 
+action_result.data.\*.assets.groupId | numeric |  |   0 
+action_result.data.\*.assets.insertDate | numeric |  |   1648602065000 
+action_result.data.\*.assets.lastUpdate | numeric |  |   1648602204000 
+action_result.data.\*.assets.otherAsset | string |  |  
+action_result.data.\*.assets.otherAssetId | numeric |  |   0 
+action_result.data.\*.assets.senId | numeric |  |   0 
+action_result.data.\*.assets.srcAssetId | numeric |  |   0 
+action_result.data.\*.assets.timestamp | numeric |  |   1648601953000 
+action_result.data.\*.bit9FindFileUrl | string |  |  
+action_result.data.\*.clientPort | numeric |  |   0 
+action_result.data.\*.collector.accessible | boolean |  |   True 
+action_result.data.\*.collector.commandPostIp | string |  |  
+action_result.data.\*.collector.commandPostName | string |  |  
+action_result.data.\*.collector.id | string |  |  
+action_result.data.\*.collector.ip | string |  |  
+action_result.data.\*.collector.local | boolean |  |   True 
+action_result.data.\*.collector.name | string |  |  
+action_result.data.\*.collector.registered | boolean |  |   True 
+action_result.data.\*.componentId | numeric |  |   4294967294 
+action_result.data.\*.compression | numeric |  |   0 
+action_result.data.\*.conclusionAssignee | string |  |  
+action_result.data.\*.conclusionStatus | string |  |  
+action_result.data.\*.decodingPath.clickableDpaths | string |  |  
+action_result.data.\*.decodingPath.commandpostIp | string |  |  
+action_result.data.\*.decodingPath.decodingPaths | string |  |  
+action_result.data.\*.decodingPath.originalAttributes | string |  |  
+action_result.data.\*.decodingPath.originalDPath | string |  |  
+action_result.data.\*.distAlertId.alertId | numeric |  |   4086 
+action_result.data.\*.distAlertId.commandPostId | numeric |  |   0 
+action_result.data.\*.distAlertId.local | boolean |  |   True 
+action_result.data.\*.dstCity | string |  |  
+action_result.data.\*.dstIpInternal | boolean |  |   False 
+action_result.data.\*.dstPort | numeric |  |   0 
+action_result.data.\*.dstPortDesc | string |  |  
+action_result.data.\*.dstPortName | string |  |  
+action_result.data.\*.dstRegion | string |  |  
+action_result.data.\*.endpointAlert.alertId | numeric |  |   4086 
+action_result.data.\*.endpointAlert.confidence | numeric |  |   0 
+action_result.data.\*.endpointAlert.createDate | numeric |  |   1648602065000 
+action_result.data.\*.endpointAlert.eventStatus | numeric |  |   0 
+action_result.data.\*.endpointAlert.eventTime | numeric |  |   1648601953000 
+action_result.data.\*.endpointAlert.eventType | numeric |  |   0 
+action_result.data.\*.endpointAlert.insertTime | numeric |  |   1648602065000 
+action_result.data.\*.endpointAlert.intelSourceType | numeric |  |   0 
+action_result.data.\*.endpointAlert.lastUpdate | numeric |  |   1648602065000 
+action_result.data.\*.endpointAlert.respondeDate | string |  |  
+action_result.data.\*.endpointAlert.severity | numeric |  |   0 
+action_result.data.\*.endpointAlert.sourceType | numeric |  |   0 
+action_result.data.\*.endpointAlert.status | numeric |  |   0 
+action_result.data.\*.endpointAlert.userFlagged | numeric |  |   0 
+action_result.data.\*.endpointAlert.validatedDate | string |  |  
+action_result.data.\*.endpointAlert.viewed | numeric |  |   0 
+action_result.data.\*.entropy | numeric |  |   7.337 
+action_result.data.\*.fidelisScore | numeric |  |   40 
+action_result.data.\*.groupId | numeric |  |   1 
+action_result.data.\*.hostCity | string |  |  
+action_result.data.\*.hostInfo.agentVersion | string |  |  
+action_result.data.\*.hostInfo.hostDesc | string |  |  
+action_result.data.\*.hostRegion | string |  |  
+action_result.data.\*.ip2IdExist | boolean |  |   False 
+action_result.data.\*.ipProtocol | string |  |  
+action_result.data.\*.pcapUUID | string |  |  
+action_result.data.\*.pfh | string |  |  
+action_result.data.\*.pfhFileLength | string |  |  
+action_result.data.\*.playbookInfo | string |  |  
+action_result.data.\*.quarantineInfo | string |  |  
+action_result.data.\*.relSesId | string |  |  
+action_result.data.\*.rule | string |  |  
+action_result.data.\*.ruleId | numeric |  |   273 
+action_result.data.\*.s1 | string |  |  
+action_result.data.\*.sensorIp | string |  |  
+action_result.data.\*.serverPort | numeric |  |   0 
+action_result.data.\*.srcCity | string |  |  
+action_result.data.\*.srcIpInternal | boolean |  |   False 
+action_result.data.\*.srcPort | numeric |  |   0 
+action_result.data.\*.srcPortDesc | string |  |  
+action_result.data.\*.srcPortName | string |  |  
+action_result.data.\*.srcRegion | string |  |  
+action_result.data.\*.ticket.assignedGroupId | numeric |  |   1 
+action_result.data.\*.ticket.assignedUserId | numeric |  |   0 
+action_result.data.\*.virusTotalDetections | string |  |  
+action_result.data.\*.vlanId | numeric |  |   -1 
+action_result.data.\*.workflowAggAlertId | numeric |  |   14 
+action_result.message | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1   
 
 ## action: 'delete alert'
 Delete alerts from Fidelis Network
@@ -232,22 +221,22 @@ Delete alerts from Fidelis Network
 Type: **generic**  
 Read only: **False**
 
-This action will always succeed regardless of the input\. This action will fail if <b>alert\_id</b> is not specified\.
+This action will always succeed regardless of the input. This action will fail if <b>alert_id</b> is not specified.
 
 #### Action Parameters
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**alert\_id** |  required  | Alert IDs \(comma\-separated\) | string |  `alert id` 
+**alert_id** |  required  | Alert IDs (comma-separated) | string |  `alert id` 
 
 #### Action Output
-DATA PATH | TYPE | CONTAINS
---------- | ---- | --------
-action\_result\.status | string | 
-action\_result\.message | string | 
-action\_result\.parameter\.alert\_id | string |  `alert id` 
-action\_result\.data\.\*\.ALERT\_DATA\.\*\.ALERT\_ID | numeric |  `alert id` 
-action\_result\.summary | string | 
-summary\.total\_objects | numeric | 
-summary\.total\_objects\_successful | numeric | 
-action\_result\.data\.\*\.Console | string | 
-action\_result\.summary\.alert\_ids | string | 
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string |  |   success  failed 
+action_result.message | string |  |  
+action_result.parameter.alert_id | string |  `alert id`  |   4046 
+action_result.data.\*.ALERT_DATA.\*.ALERT_ID | numeric |  `alert id`  |   4046 
+action_result.summary | string |  |  
+summary.total_objects | numeric |  |   1 
+summary.total_objects_successful | numeric |  |   1 
+action_result.data.\*.Console | string |  |   OK 
+action_result.summary.alert_ids | string |  |   Deleted 2 alerts from Fidelis Network 
