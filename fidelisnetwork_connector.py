@@ -276,7 +276,7 @@ class FidelisnetworkConnector(BaseConnector):
         headers = self._login(action_result)
 
         if not headers.get('x-uid'):
-            self.save_progress(FIDELIS_ERR_CONNECTIVITY_TEST)
+            self.save_progress(FIDELIS_ERROR_CONNECTIVITY_TEST)
             return action_result.get_status()
 
         self.save_progress(FIDELIS_SUCC_CONNECTIVITY_TEST)
