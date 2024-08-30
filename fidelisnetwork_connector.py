@@ -459,7 +459,7 @@ class FidelisnetworkConnector(BaseConnector):
         alert_ids = [x.strip() for x in alert_ids.split(",")]
         alert_ids = list(filter(None, alert_ids))
 
-        if not(len(alert_ids)):
+        if not (len(alert_ids)):
             return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter='alert_id'))
 
         data = json.dumps({
