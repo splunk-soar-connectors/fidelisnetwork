@@ -1,6 +1,6 @@
 # File: fidelisnetwork_connector.py
 #
-# Copyright (c) 2022 Splunk Inc.
+# Copyright (c) 2022-2024 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -276,7 +276,7 @@ class FidelisnetworkConnector(BaseConnector):
         headers = self._login(action_result)
 
         if not headers.get('x-uid'):
-            self.save_progress(FIDELIS_ERR_CONNECTIVITY_TEST)
+            self.save_progress(FIDELIS_ERROR_CONNECTIVITY_TEST)
             return action_result.get_status()
 
         self.save_progress(FIDELIS_SUCC_CONNECTIVITY_TEST)
@@ -459,7 +459,7 @@ class FidelisnetworkConnector(BaseConnector):
         alert_ids = [x.strip() for x in alert_ids.split(",")]
         alert_ids = list(filter(None, alert_ids))
 
-        if not(len(alert_ids)):
+        if not (len(alert_ids)):
             return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter='alert_id'))
 
         data = json.dumps({
