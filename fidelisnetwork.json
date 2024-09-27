@@ -12,7 +12,7 @@
     "product_vendor": "Fidelis Cybersecurity",
     "product_name": "Fidelis Network",
     "product_version_regex": ".*",
-    "min_phantom_version": "5.2.0",
+    "min_phantom_version": "6.2.1",
     "latest_tested_versions": [
         "Fidelis Network and Deception, v9.4.x"
     ],
