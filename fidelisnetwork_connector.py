@@ -56,7 +56,7 @@ class FidelisnetworkConnector(BaseConnector):
         self._retry_header = None
 
     def initialize(self):
-        """ This is an optional function that can be implemented by the AppConnector derived class. Since the
+        """This is an optional function that can be implemented by the AppConnector derived class. Since the
         configuration dictionary is already validated by the time this function is called, it's a good place to do any
         extra initialization of any internal modules. This function MUST return a value of either phantom.APP_SUCCESS or
         phantom.APP_ERROR. If this function returns phantom.APP_ERROR, then AppConnector::handle_action will not get
@@ -75,9 +75,9 @@ class FidelisnetworkConnector(BaseConnector):
         self._retry_with_latest_header = True
         self._retry_header = True
         # Base URL
-        base_url = config['host_url']
+        base_url = config["host_url"]
 
-        self._base_url = base_url + ('' if base_url.endswith('/') else '/')
+        self._base_url = base_url + ("" if base_url.endswith("/") else "/")
 
         return phantom.APP_SUCCESS
 
@@ -91,7 +91,7 @@ class FidelisnetworkConnector(BaseConnector):
         return phantom.APP_SUCCESS
 
     def _login(self, action_result):
-        """ Authenticate and set header with latest access token
+        """Authenticate and set header with latest access token
 
         Args:
             action_result: _description_
@@ -100,29 +100,24 @@ class FidelisnetworkConnector(BaseConnector):
             headers (dict): Headers
         """
 
-        headers = {
-            'Content-Type': 'application/json'
-        }
+        headers = {"Content-Type": "application/json"}
 
-        if self._state.get('x_uid') is None or self.get_action_identifier() == self.ACTION_ID_TEST_CONNECTIVITY:
+        if self._state.get("x_uid") is None or self.get_action_identifier() == self.ACTION_ID_TEST_CONNECTIVITY:
             config = self.get_config()
             self.save_progress(APP_PROG_CONNECTING_TO_FIDELIS.format(self._base_url))
-            username = config['username'].strip()
-            password = config['password'].strip()
-            data = json.dumps({
-                "user": username,
-                "password": password
-            })
-            endpoint = 'j/rest/v2/access/token/'
+            username = config["username"].strip()
+            password = config["password"].strip()
+            data = json.dumps({"user": username, "password": password})
+            endpoint = "j/rest/v2/access/token/"
 
             ret_val, response = self._make_rest_call(endpoint, action_result, data=data, method="post", headers=headers)
 
             if phantom.is_fail(ret_val):
                 return headers
 
-            self._state['x_uid'] = response.get('uid', None)
+            self._state["x_uid"] = response.get("uid", None)
 
-        headers['x-uid'] = self._state.get('x_uid', None)
+        headers["x-uid"] = self._state.get("x_uid", None)
 
         return headers
 
@@ -147,18 +142,18 @@ class FidelisnetworkConnector(BaseConnector):
             for element in soup(["script", "style", "footer", "nav"]):
                 element.extract()
             error_text = soup.text
-            split_lines = error_text.split('\n')
+            split_lines = error_text.split("\n")
             split_lines = [x.strip() for x in split_lines if x.strip()]
-            error_text = '\n'.join(split_lines)
-            if '404' in error_text:
-                error_text = 'Invalid Fidelis API URL'
+            error_text = "\n".join(split_lines)
+            if "404" in error_text:
+                error_text = "Invalid Fidelis API URL"
         except Exception as ex:
             self.debug_print("Exception in _process_html_response: {}".format(ex))
             error_text = "Cannot parse error details"
 
         message = "Status Code: {0}. Data from server:\n{1}\n".format(status_code, error_text)
 
-        message = message.replace('{', '{{').replace('}', '}}')
+        message = message.replace("{", "{{").replace("}", "}}")
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -167,46 +162,46 @@ class FidelisnetworkConnector(BaseConnector):
         try:
             resp_json = r.json()
         except Exception as ex:
-            self.debug_print('Exception in _download_file_to_vault: {}'.format(ex))
+            self.debug_print("Exception in _download_file_to_vault: {}".format(ex))
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Unable to parse JSON response. Error: {0}".format(str(ex))), None)
 
         # Please specify the status codes here
         if 200 <= r.status_code < 399:
             return RetVal(phantom.APP_SUCCESS, resp_json)
 
-        if 'detailMessage' in resp_json and 'errorCode' in resp_json:
-            message = resp_json['detailMessage']
-            if 'Unauthorized access from Java with invalid session' in resp_json['detailMessage']:
+        if "detailMessage" in resp_json and "errorCode" in resp_json:
+            message = resp_json["detailMessage"]
+            if "Unauthorized access from Java with invalid session" in resp_json["detailMessage"]:
                 message = FIDELIS_TEST_CONN_MSG
-            elif any(error_msg in resp_json['detailMessage'] for error_msg in FIDELIS_ERROR_STRINGS):
+            elif any(error_msg in resp_json["detailMessage"] for error_msg in FIDELIS_ERROR_STRINGS):
                 message = "Please enter valid Alert ID [Numeric]"
         # You should process the error returned in the json
         else:
             message = "Error from server. Status Code: {0} Data from server: {1}".format(
-                    r.status_code, r.text.encode('ascii', 'backslashreplace').
-                    decode('unicode-escape').replace('{', '{{').replace('}', '}}'))
+                r.status_code, r.text.encode("ascii", "backslashreplace").decode("unicode-escape").replace("{", "{{").replace("}", "}}")
+            )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
     def _process_response(self, r, action_result):
 
         # store the r_text in debug data, it will get dumped in the logs if the action fails
-        if hasattr(action_result, 'add_debug_data'):
-            action_result.add_debug_data({'r_status_code': r.status_code})
-            action_result.add_debug_data({'r_text': r.text})
-            action_result.add_debug_data({'r_headers': r.headers})
+        if hasattr(action_result, "add_debug_data"):
+            action_result.add_debug_data({"r_status_code": r.status_code})
+            action_result.add_debug_data({"r_text": r.text})
+            action_result.add_debug_data({"r_headers": r.headers})
 
         # Process each 'Content-Type' of response separately
 
         # Process a json response
-        if 'json' in r.headers.get('Content-Type', ''):
+        if "json" in r.headers.get("Content-Type", ""):
             return self._process_json_response(r, action_result)
 
         # Process an HTML response, Do this no matter what the api talks.
         # There is a high chance of a PROXY in between phantom and the rest of
         # world, in case of errors, PROXY's return HTML, this function parses
         # the error and adds it to the action_result.
-        if 'html' in r.headers.get('Content-Type', ''):
+        if "html" in r.headers.get("Content-Type", ""):
             return self._process_html_response(r, action_result)
 
         # it's not content-type that is to be parsed, handle an empty response
@@ -215,7 +210,8 @@ class FidelisnetworkConnector(BaseConnector):
 
         # everything else is actually an error at this point
         message = "Can't process response from server. Status Code: {0} Data from server: {1}".format(
-                r.status_code, r.text.replace('{', '{{').replace('}', '}}'))
+            r.status_code, r.text.replace("{", "{{").replace("}", "}}")
+        )
 
         return RetVal(action_result.set_status(phantom.APP_ERROR, message), None)
 
@@ -232,10 +228,10 @@ class FidelisnetworkConnector(BaseConnector):
 
         try:
             r = request_func(
-                            url,
-                            data=data,
-                            headers=headers,
-                            verify=True,
+                url,
+                data=data,
+                headers=headers,
+                verify=True,
             )
             # makes rest call again with new x-uid token in case old one gave 401 error
             if r.status_code == 401 and self._retry_access_token:
@@ -245,8 +241,8 @@ class FidelisnetworkConnector(BaseConnector):
                     return self._make_rest_call(endpoint, action_result, headers, params, data, method, **kwargs)
 
                 if self._retry_header:
-                    if self._state.get('x_uid'):
-                        self._state.pop('x_uid')
+                    if self._state.get("x_uid"):
+                        self._state.pop("x_uid")
                     headers = self._login(action_result)
                     self._retry_header = False
                     self._retry_one_more = True
@@ -258,13 +254,13 @@ class FidelisnetworkConnector(BaseConnector):
                 self._retry_access_token = False  # make it to false to avoid getting access token after one time (prevents recursive loop)
 
         except Exception as ex:
-            self.debug_print('Exception in _make_rest_call: {}'.format(ex))
+            self.debug_print("Exception in _make_rest_call: {}".format(ex))
             return RetVal(action_result.set_status(phantom.APP_ERROR, "Error Connecting to server. Details: {0}".format(str(ex))), resp_json)
 
         return self._process_response(r, action_result)
 
     def _test_connectivity(self, param):
-        """ Testing of given credentials and obtaining authorization for all other actions.
+        """Testing of given credentials and obtaining authorization for all other actions.
 
         :param param: Dictionary of input parameters
         :return: status(phantom.APP_SUCCESS/phantom.APP_ERROR)
@@ -275,7 +271,7 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        if not headers.get('x-uid'):
+        if not headers.get("x-uid"):
             self.save_progress(FIDELIS_ERROR_CONNECTIVITY_TEST)
             return action_result.get_status()
 
@@ -305,9 +301,7 @@ class FidelisnetworkConnector(BaseConnector):
                     action_result.set_status(phantom.APP_ERROR, FIDELIS_LIMIT_VALIDATION_MSG.format(parameter=key))
                     return None
         except Exception as e:
-            self.debug_print(
-                "Integer validation failed. Error occurred while validating integer value. Error: {}".format(str(e))
-            )
+            self.debug_print("Integer validation failed. Error occurred while validating integer value. Error: {}".format(str(e)))
             if allow_zero:
                 error_text = FIDELIS_LIMIT_VALIDATION_ALLOW_ZERO_MSG.format(parameter=key)
             else:
@@ -323,13 +317,12 @@ class FidelisnetworkConnector(BaseConnector):
             return True
         except Exception as e:
             action_result.set_status(
-                phantom.APP_ERROR,
-                "Wrong format for '{}' please use this '%Y-%m-%d %H:%M:%S' format. Exception : {}".format(time, e)
+                phantom.APP_ERROR, "Wrong format for '{}' please use this '%Y-%m-%d %H:%M:%S' format. Exception : {}".format(time, e)
             )
             return False
 
     def _list_alerts(self, param):
-        """ List alerts
+        """List alerts
 
         Args:
             param : Dictionary of input parameters
@@ -342,28 +335,21 @@ class FidelisnetworkConnector(BaseConnector):
 
         action_result = self.add_action_result(ActionResult(dict(param)))
 
-        order = [{"column": param.get('column', "ALERT_TIME"), "direction": param.get('direction', "DESC")}]
+        order = [{"column": param.get("column", "ALERT_TIME"), "direction": param.get("direction", "DESC")}]
 
-        limit = self._validate_integers(action_result, param.get('limit', 100), 'limit')
+        limit = self._validate_integers(action_result, param.get("limit", 100), "limit")
         if limit is None:
             return action_result.get_status(), None
 
-        pagination = {
-            "size": limit,
-            "page": 1
-        }
+        pagination = {"size": limit, "page": 1}
 
-        time_settings = {
-            "from": "",
-            "to": "",
-            "key": "all"
-        }
+        time_settings = {"from": "", "to": "", "key": "all"}
 
-        start_time = param.get('start_time', None)
-        end_time = param.get('end_time', None)
+        start_time = param.get("start_time", None)
+        end_time = param.get("end_time", None)
 
         if start_time is None and end_time is None:
-            self.debug_print('Time is not given by user.')
+            self.debug_print("Time is not given by user.")
         if start_time is not None:
             if not self._validate_time_format(action_result, start_time):
                 return action_result.get_status()
@@ -375,23 +361,18 @@ class FidelisnetworkConnector(BaseConnector):
             time_settings["key"] = "custom"
             time_settings["to"] = end_time
 
-        data = json.dumps({
-            "columns": [
-                "ALERT_ID",
-                "ALERT_TIME",
-                "SEVERITY",
-                "HOST_IP",
-                "SUMMARY",
-                "ALERT_TYPE"
-            ],
-            "order": order,
-            "pagination": pagination,
-            "timeSettings": time_settings
-        })
+        data = json.dumps(
+            {
+                "columns": ["ALERT_ID", "ALERT_TIME", "SEVERITY", "HOST_IP", "SUMMARY", "ALERT_TYPE"],
+                "order": order,
+                "pagination": pagination,
+                "timeSettings": time_settings,
+            }
+        )
 
         headers = self._login(action_result)
 
-        endpoint = 'j/rest/v1/alert/search/'
+        endpoint = "j/rest/v1/alert/search/"
 
         ret_val, resp_json = self._make_rest_call(endpoint, action_result, data=data, method="post", headers=headers)
         if not ret_val and not resp_json:
@@ -401,13 +382,13 @@ class FidelisnetworkConnector(BaseConnector):
 
         # Add a dictionary that is made up of the most important values from data into the summary
         summary = action_result.update_summary({})
-        total_alert = len(resp_json.get('aaData'))
-        summary['total_alerts'] = total_alert
+        total_alert = len(resp_json.get("aaData"))
+        summary["total_alerts"] = total_alert
 
         return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_LIST_ALERTS.format(total_alert))
 
     def _get_alert_details(self, param):
-        """ Get alert detail
+        """Get alert detail
 
         Args:
             param : Dictionary of input parameters
@@ -422,9 +403,9 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        alert_id = param['alert_id']
+        alert_id = param["alert_id"]
 
-        endpoint = 'j/rest/v1/alert/info/{}/'.format(alert_id)
+        endpoint = "j/rest/v1/alert/info/{}/".format(alert_id)
 
         ret_val, resp_json = self._make_rest_call(endpoint, action_result, headers=headers)
 
@@ -434,12 +415,12 @@ class FidelisnetworkConnector(BaseConnector):
         action_result.add_data(resp_json)
 
         summary = action_result.update_summary({})
-        summary['alert_id'] = "Fetched details of {} alert".format(resp_json.get('alertId'))
+        summary["alert_id"] = "Fetched details of {} alert".format(resp_json.get("alertId"))
 
         return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_GET_ALERT_DETAILS)
 
     def _delete_alert(self, param):
-        """ Delete alert
+        """Delete alert
 
         Args:
             param : Dictionary of input parameters
@@ -454,20 +435,17 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        alert_ids = param['alert_id']
+        alert_ids = param["alert_id"]
 
         alert_ids = [x.strip() for x in alert_ids.split(",")]
         alert_ids = list(filter(None, alert_ids))
 
         if not (len(alert_ids)):
-            return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter='alert_id'))
+            return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter="alert_id"))
 
-        data = json.dumps({
-            "type": "byAlertID",
-            "alertIds": alert_ids
-        })
+        data = json.dumps({"type": "byAlertID", "alertIds": alert_ids})
 
-        endpoint = 'j/rest/v1/alert/delete/'
+        endpoint = "j/rest/v1/alert/delete/"
 
         ret_val, resp_json = self._make_rest_call(endpoint, action_result, data=data, method="post", headers=headers)
 
@@ -476,12 +454,12 @@ class FidelisnetworkConnector(BaseConnector):
 
         alert_lis = []
         for i in range(0, len(alert_ids)):
-            alert_lis.append({'ALERT_ID': alert_ids[i]})
+            alert_lis.append({"ALERT_ID": alert_ids[i]})
 
-        action_result.add_data({'ALERT_DATA': alert_lis})
+        action_result.add_data({"ALERT_DATA": alert_lis})
 
         summary = action_result.update_summary({})
-        summary['alert_ids'] = "Deleted {} alerts from Fidelis Network".format(len(alert_ids))
+        summary["alert_ids"] = "Deleted {} alerts from Fidelis Network".format(len(alert_ids))
 
         return action_result.set_status(phantom.APP_SUCCESS, FIDELIS_SUCC_DELETE_ALERTS)
 
@@ -510,7 +488,7 @@ class FidelisnetworkConnector(BaseConnector):
         return result
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
 
     import sys
 

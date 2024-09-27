@@ -29,21 +29,15 @@ class RequestStateHandler:
             raise AttributeError("RequestStateHandler got invalid asset_id")
 
     def _encrypt_state(self, state):
-        if 'x_uid' in state:
-            oauth_token = state['x_uid']
-            state['x_uid'] = encryption_helper.encrypt(  # pylint: disable=E1101
-                json.dumps(oauth_token),
-                self._asset_id
-            )
+        if "x_uid" in state:
+            oauth_token = state["x_uid"]
+            state["x_uid"] = encryption_helper.encrypt(json.dumps(oauth_token), self._asset_id)  # pylint: disable=E1101
         return state
 
     def _decrypt_state(self, state):
-        if 'x_uid' in state:
-            oauth_token = encryption_helper.decrypt(  # pylint: disable=E1101
-                state['x_uid'],
-                self._asset_id
-            )
-            state['x_uid'] = json.loads(oauth_token)
+        if "x_uid" in state:
+            oauth_token = encryption_helper.decrypt(state["x_uid"], self._asset_id)  # pylint: disable=E1101
+            state["x_uid"] = json.loads(oauth_token)
         return state
 
     def _get_state_file(self):
@@ -64,7 +58,7 @@ class RequestStateHandler:
         state = self._encrypt_state(state)
         state_file = self._get_state_file()
         try:
-            with open(state_file, 'w+') as fp:
+            with open(state_file, "w+") as fp:
                 fp.write(json.dumps(state))
         except Exception:
             pass
@@ -75,7 +69,7 @@ class RequestStateHandler:
         state_file = self._get_state_file()
         state = {}
         try:
-            with open(state_file, 'r') as fp:
+            with open(state_file, "r") as fp:
                 in_json = fp.read()
                 state = json.loads(in_json)
         except Exception:
