@@ -6,7 +6,7 @@ Connector Version: 1.0.2
 Product Vendor: Fidelis Cybersecurity  
 Product Name: Fidelis Network  
 Product Version Supported (regex): ".\*"  
-Minimum Product Version: 5.2.0  
+Minimum Product Version: 6.2.1  
 
 This app integrates with Fidelis Network to execute various investigate and generic actions
 
