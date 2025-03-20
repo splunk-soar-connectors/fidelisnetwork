@@ -1,6 +1,6 @@
 # File: request_handler.py
 #
-# Copyright (c) 2022-2024 Splunk Inc.
+# Copyright (c) 2022-2025 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -29,26 +29,24 @@ class RequestStateHandler:
             raise AttributeError("RequestStateHandler got invalid asset_id")
 
     def _encrypt_state(self, state):
-        if 'x_uid' in state:
-            oauth_token = state['x_uid']
-            state['x_uid'] = encryption_helper.encrypt(  # pylint: disable=E1101
-                json.dumps(oauth_token),
-                self._asset_id
+        if "x_uid" in state:
+            oauth_token = state["x_uid"]
+            state["x_uid"] = encryption_helper.encrypt(  # pylint: disable=E1101
+                json.dumps(oauth_token), self._asset_id
             )
         return state
 
     def _decrypt_state(self, state):
-        if 'x_uid' in state:
+        if "x_uid" in state:
             oauth_token = encryption_helper.decrypt(  # pylint: disable=E1101
-                state['x_uid'],
-                self._asset_id
+                state["x_uid"], self._asset_id
             )
-            state['x_uid'] = json.loads(oauth_token)
+            state["x_uid"] = json.loads(oauth_token)
         return state
 
     def _get_state_file(self):
         dirpath = os.path.split(__file__)[0]
-        state_file = "{0}/{1}_state.json".format(dirpath, self._asset_id)
+        state_file = f"{dirpath}/{self._asset_id}_state.json"
         return state_file
 
     def delete_state(self):
@@ -64,7 +62,7 @@ class RequestStateHandler:
         state = self._encrypt_state(state)
         state_file = self._get_state_file()
         try:
-            with open(state_file, 'w+') as fp:
+            with open(state_file, "w+") as fp:
                 fp.write(json.dumps(state))
         except Exception:
             pass
@@ -75,7 +73,7 @@ class RequestStateHandler:
         state_file = self._get_state_file()
         state = {}
         try:
-            with open(state_file, 'r') as fp:
+            with open(state_file) as fp:
                 in_json = fp.read()
                 state = json.loads(in_json)
         except Exception:
