@@ -7,8 +7,8 @@
     "type": "network security",
     "license": "Copyright (c) 2022-2025 Splunk Inc.",
     "main_module": "fidelisnetwork_connector.py",
-    "app_version": "1.0.3",
-    "utctime_updated": "2025-04-11T18:07:36.774649Z",
+    "app_version": "1.0.4",
+    "utctime_updated": "2025-07-30T17:45:15.141486Z",
     "product_vendor": "Fidelis Cybersecurity",
     "product_name": "Fidelis Network",
     "product_version_regex": ".*",
@@ -18,7 +18,10 @@
     ],
     "logo": "logo_fidelisnetwork.svg",
     "logo_dark": "logo_fidelisnetwork_dark.svg",
-    "python_version": ["3.9", "3.13"],
+    "python_version": [
+        "3.9",
+        "3.13"
+    ],
     "fips_compliant": true,
     "configuration": {
         "host_url": {
