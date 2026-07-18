@@ -1,9 +1,9 @@
 # Fidelis Network
 
-Publisher: Splunk \
-Connector Version: 1.0.5 \
-Product Vendor: Fidelis Cybersecurity \
-Product Name: Fidelis Network \
+Publisher: Splunk <br>
+Connector Version: 1.0.5 <br>
+Product Vendor: Fidelis Cybersecurity <br>
+Product Name: Fidelis Network <br>
 Minimum Product Version: 5.2.0
 
 This app integrates with Fidelis Network to execute various investigate and generic actions
@@ -20,16 +20,16 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity \
-[list alerts](#action-list-alerts) - List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time \
-[get alert details](#action-get-alert-details) - Gets an alert details from Fidelis Network \
+[test connectivity](#action-test-connectivity) - Validate the asset configuration for connectivity <br>
+[list alerts](#action-list-alerts) - List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time <br>
+[get alert details](#action-get-alert-details) - Gets an alert details from Fidelis Network <br>
 [delete alert](#action-delete-alert) - Delete alerts from Fidelis Network
 
 ## action: 'test connectivity'
 
 Validate the asset configuration for connectivity
 
-Type: **test** \
+Type: **test** <br>
 Read only: **True**
 
 This action logs into the device using a REST API call to check the connection and credentials configured.
@@ -46,7 +46,7 @@ No Output
 
 List all of the alerts tracked within the enterprise on particular assets and|or users for the specified time
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 If the user provides time-related action parameters, the priority will be given to the [Time Range] action parameter and the search will be performed according to its given value.
@@ -97,7 +97,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Gets an alert details from Fidelis Network
 
-Type: **investigate** \
+Type: **investigate** <br>
 Read only: **True**
 
 #### Action Parameters
@@ -228,7 +228,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 Delete alerts from Fidelis Network
 
-Type: **generic** \
+Type: **generic** <br>
 Read only: **False**
 
 This action will always succeed regardless of the input. This action will fail if <b>alert_id</b> is not specified.
@@ -257,7 +257,7 @@ ______________________________________________________________________
 
 Auto-generated Splunk SOAR Connector documentation.
 
-Copyright 2025 Splunk Inc.
+Copyright 2026 Splunk Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

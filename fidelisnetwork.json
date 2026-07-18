@@ -5,7 +5,7 @@
     "publisher": "Splunk",
     "package_name": "phantom_fidelisnetwork",
     "type": "network security",
-    "license": "Copyright (c) 2022-2025 Splunk Inc.",
+    "license": "Copyright (c) 2022-2026 Splunk Inc.",
     "main_module": "fidelisnetwork_connector.py",
     "app_version": "1.0.5",
     "utctime_updated": "2025-08-01T20:32:21.746402Z",
@@ -1088,5 +1088,11 @@
             ],
             "versions": "EQ(*)"
         }
-    ]
+    ],
+    "pip39_dependencies": {
+        "wheel": []
+    },
+    "pip313_dependencies": {
+        "wheel": []
+    }
 }
