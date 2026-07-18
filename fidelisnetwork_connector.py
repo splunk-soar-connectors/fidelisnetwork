@@ -396,7 +396,9 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        alert_id = param["alert_id"]
+        alert_id = self._validate_integers(action_result, param["alert_id"], "alert_id")
+        if alert_id is None:
+            return action_result.get_status()
 
         endpoint = f"j/rest/v1/alert/info/{alert_id}/"
 
@@ -435,6 +437,14 @@ class FidelisnetworkConnector(BaseConnector):
 
         if not (len(alert_ids)):
             return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter="alert_id"))
+
+        validated_alert_ids = []
+        for alert_id in alert_ids:
+            validated_alert_id = self._validate_integers(action_result, alert_id, "alert_id")
+            if validated_alert_id is None:
+                return action_result.get_status()
+            validated_alert_ids.append(validated_alert_id)
+        alert_ids = validated_alert_ids
 
         data = json.dumps({"type": "byAlertID", "alertIds": alert_ids})
 
