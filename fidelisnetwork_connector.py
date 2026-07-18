@@ -183,8 +183,11 @@ class FidelisnetworkConnector(BaseConnector):
         # store the r_text in debug data, it will get dumped in the logs if the action fails
         if hasattr(action_result, "add_debug_data"):
             action_result.add_debug_data({"r_status_code": r.status_code})
-            action_result.add_debug_data({"r_text": r.text})
-            action_result.add_debug_data({"r_headers": r.headers})
+            response_url = getattr(r, "url", "")
+            is_token_response = response_url.rstrip("/").endswith("/j/rest/v2/access/token")
+            if not is_token_response:
+                action_result.add_debug_data({"r_text": r.text})
+                action_result.add_debug_data({"r_headers": r.headers})
 
         # Process each 'Content-Type' of response separately
 
