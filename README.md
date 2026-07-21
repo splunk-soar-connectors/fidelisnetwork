@@ -1,7 +1,7 @@
 # Fidelis Network
 
 Publisher: Splunk <br>
-Connector Version: 1.0.5 <br>
+Connector Version: 1.0.6 <br>
 Product Vendor: Fidelis Cybersecurity <br>
 Product Name: Fidelis Network <br>
 Minimum Product Version: 5.2.0
