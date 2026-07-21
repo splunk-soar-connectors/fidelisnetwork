@@ -1,6 +1,6 @@
 # File: fidelisnetwork_connector.py
 #
-# Copyright (c) 2022-2025 Splunk Inc.
+# Copyright (c) 2022-2026 Splunk Inc.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -183,8 +183,11 @@ class FidelisnetworkConnector(BaseConnector):
         # store the r_text in debug data, it will get dumped in the logs if the action fails
         if hasattr(action_result, "add_debug_data"):
             action_result.add_debug_data({"r_status_code": r.status_code})
-            action_result.add_debug_data({"r_text": r.text})
-            action_result.add_debug_data({"r_headers": r.headers})
+            response_url = getattr(r, "url", "")
+            is_token_response = response_url.rstrip("/").endswith("/j/rest/v2/access/token")
+            if not is_token_response:
+                action_result.add_debug_data({"r_text": r.text})
+                action_result.add_debug_data({"r_headers": r.headers})
 
         # Process each 'Content-Type' of response separately
 
@@ -396,7 +399,9 @@ class FidelisnetworkConnector(BaseConnector):
 
         headers = self._login(action_result)
 
-        alert_id = param["alert_id"]
+        alert_id = self._validate_integers(action_result, param["alert_id"], "alert_id")
+        if alert_id is None:
+            return action_result.get_status()
 
         endpoint = f"j/rest/v1/alert/info/{alert_id}/"
 
@@ -435,6 +440,14 @@ class FidelisnetworkConnector(BaseConnector):
 
         if not (len(alert_ids)):
             return action_result.set_status(phantom.APP_ERROR, FIDELIS_ALERT_ID_VALIDATION_MSG.format(parameter="alert_id"))
+
+        validated_alert_ids = []
+        for alert_id in alert_ids:
+            validated_alert_id = self._validate_integers(action_result, alert_id, "alert_id")
+            if validated_alert_id is None:
+                return action_result.get_status()
+            validated_alert_ids.append(validated_alert_id)
+        alert_ids = validated_alert_ids
 
         data = json.dumps({"type": "byAlertID", "alertIds": alert_ids})
 
