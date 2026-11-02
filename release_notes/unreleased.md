@@ -1,3 +1,1 @@
 **Unreleased**
-
-* Replace direct state-file access with the BaseConnector `load_state` and `save_state` methods to support HA-compatible state handling and SDK migration.
