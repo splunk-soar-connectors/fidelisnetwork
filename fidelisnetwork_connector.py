@@ -26,7 +26,6 @@ from phantom.base_connector import BaseConnector
 
 # imports specific to this connector
 from fidelisnetwork_consts import *
-from request_handler import RequestStateHandler
 
 
 class RetVal(tuple):
@@ -64,9 +63,7 @@ class FidelisnetworkConnector(BaseConnector):
             :return: status success/failure
         """
         config = self.get_config()
-        asset_id = self.get_asset_id()
-        self.rsh = RequestStateHandler(asset_id)
-        self._state = self.rsh.load_state()
+        self._state = self.load_state()
         # Below variable uses for retrying rest call purpose
         self._retry_access_token = True
         self._retry_one_more = True
@@ -85,7 +82,7 @@ class FidelisnetworkConnector(BaseConnector):
         Returns:
             :return: status success
         """
-        self.rsh.save_state(self._state)
+        self.save_state(self._state)
         return phantom.APP_SUCCESS
 
     def _login(self, action_result):
